@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Browser Memory</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/static/styles.css" />
+</head>
+<body>
+  <div class="atmosphere" aria-hidden="true"></div>
+  <div class="app">
+    <header class="top">
+      <div class="brand-block">
+        <p class="brand">Browser Memory</p>
+        <p class="tagline">Close tabs without losing your place.</p>
+      </div>
+      <nav class="tabs" role="tablist">
+        <button class="tab active" data-screen="ask" role="tab" aria-selected="true">Ask</button>
+        <button class="tab" data-screen="workspaces" role="tab">Workspaces</button>
+        <button class="tab" data-screen="memory" role="tab">Memory</button>
+      </nav>
+    </header>
+
+    <aside id="resume-banner" class="resume-banner hidden" hidden>
+      <div>
+        <p class="eyebrow">Pick up where you left off</p>
+        <h2 id="resume-name"></h2>
+        <p id="resume-next" class="muted"></p>
+      </div>
+      <button id="resume-banner-btn" class="btn primary">Resume</button>
+    </aside>
+
+    <main>
+      <section id="screen-ask" class="screen active" data-screen="ask">
+        <form id="ask-form" class="ask-form">
+          <label class="sr-only" for="ask-input">Ask about something you were working on</label>
+          <input id="ask-input" type="search" autocomplete="off"
+            placeholder="What was that supplier with the minimum order of 500?" />
+          <button type="submit" class="btn primary">Find</button>
+        </form>
+
+        <div id="answer" class="answer hidden" hidden></div>
+        <div id="results" class="results"></div>
+
+        <div class="section-head">
+          <h2>Recent pages</h2>
+          <button id="sync-btn" class="btn ghost">Sync browser history</button>
+        </div>
+        <ul id="recent" class="page-list"></ul>
+      </section>
+
+      <section id="screen-workspaces" class="screen" data-screen="workspaces" hidden>
+        <div class="section-head">
+          <h2>Workspaces</h2>
+          <button id="save-place-btn" class="btn primary">Save my place</button>
+        </div>
+        <div id="save-panel" class="save-panel hidden" hidden></div>
+        <ul id="workspace-list" class="workspace-list"></ul>
+      </section>
+
+      <section id="screen-memory" class="screen" data-screen="memory" hidden>
+        <div class="section-head">
+          <h2>Memory controls</h2>
+        </div>
+        <div class="memory-grid">
+          <div class="panel">
+            <h3>Capture status</h3>
+            <dl id="stats" class="stats"></dl>
+            <p id="cdp-status" class="muted"></p>
+          </div>
+          <div class="panel">
+            <h3>Start with your computer</h3>
+            <p class="muted">The agent can launch when you log in and open this workspace automatically.</p>
+            <p id="autostart-status" class="muted"></p>
+            <div class="row">
+              <button id="autostart-on" class="btn primary">Enable auto-start</button>
+              <button id="autostart-off" class="btn ghost">Disable</button>
+            </div>
+          </div>
+          <div class="panel">
+            <h3>Excluded sites</h3>
+            <form id="exclude-form" class="row">
+              <input id="exclude-input" placeholder="never include example.com" />
+              <button class="btn" type="submit">Exclude</button>
+            </form>
+            <ul id="exclusions" class="plain-list"></ul>
+          </div>
+          <div class="panel danger-zone">
+            <h3>Retention</h3>
+            <p class="muted">Delete removes pages from local encrypted storage. This cannot be undone.</p>
+            <button id="delete-all" class="btn danger">Delete all history</button>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+  <script src="/static/app.js"></script>
+</body>
+</html>
