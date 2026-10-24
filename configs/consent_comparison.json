@@ -1,0 +1,25 @@
+{
+  "seeds": [11, 29, 47],
+  "models": ["logistic", "boosting", "gru"],
+  "sites": ["A", "B"],
+  "scenarios": [
+    {"name": "full_input", "lab_denial": 0, "vital_denial": 0, "start": 0},
+    {"name": "optout_10", "lab_denial": 0.1, "vital_denial": 0.1, "start": 0},
+    {"name": "optout_30", "lab_denial": 0.3, "vital_denial": 0.3, "start": 0},
+    {"name": "optout_50", "lab_denial": 0.5, "vital_denial": 0.5, "start": 0},
+    {"name": "no_labs", "lab_denial": 1, "vital_denial": 0, "start": 0},
+    {"name": "no_vitals", "lab_denial": 0, "vital_denial": 1, "start": 0},
+    {"name": "metadata_only", "lab_denial": 1, "vital_denial": 1, "start": 0},
+    {"name": "revoke_30_at12", "lab_denial": 0.3, "vital_denial": 0.3, "start": 12}
+  ],
+  "discrimination_bootstrap": 200,
+  "policy_bootstrap": 500,
+  "interval": "pointwise paired patient percentile 95%; conditional on fitted model, split, and simulated permissions",
+  "policy": "Reuse parent validation-utility thresholds unchanged in every permission scenario; once and hourly",
+  "consent_scope": "inference-time input availability only; parent models trained on full public benchmark features",
+  "utility": "official full-stay challenge utility, distinct from clinical outcomes",
+  "primary_contrast": "restricted minus full input on identical held-out patients",
+  "noninferiority_margin": null,
+  "privacy": "permitted source-hours and available observed-feature cells are exposure proxies, not measured leakage",
+  "source_stage": "revision"
+}
