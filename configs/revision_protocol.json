@@ -1,0 +1,75 @@
+{
+  "stage": "revision",
+  "seeds": [
+    11,
+    29,
+    47
+  ],
+  "alpha": 0.05,
+  "delta": 0.05,
+  "budgets": [
+    0.1,
+    0.25,
+    0.5,
+    0.75,
+    1.0
+  ],
+  "split_A": [
+    0.55,
+    0.15,
+    0.15,
+    0.15
+  ],
+  "split_B": [
+    0.25,
+    0.75
+  ],
+  "models": [
+    "logistic",
+    "boosting",
+    "gru"
+  ],
+  "bootstrap_replicates": 500,
+  "calibration_draws": 200,
+  "threshold_count": 51,
+  "incident_window": "[first positive label, first positive label+6), truncated at observed stay end; early initial-positive patients excluded from incident endpoint",
+  "policy": "first threshold crossing once per patient; repeated-alert comparison; early alert can consume the only review",
+  "consent_rates": [
+    0,
+    0.1,
+    0.3,
+    0.5
+  ],
+  "consent": "simulated independent patient opt-out of labs/vitals; scheduled revocation at hour 12; all derived state cleared and feature replayed under permissions",
+  "training": "A train only; validation for hyperparameters and candidate thresholds; calibration disjoint; B calibration separate from frozen B test",
+  "positive_calibration_sizes_B": [
+    25,
+    50,
+    100,
+    200,
+    400
+  ],
+  "review_sensitivity": [
+    0.8,
+    0.9,
+    1.0
+  ],
+  "review_specificity": [
+    0.9,
+    0.99
+  ],
+  "service_minutes": [
+    2,
+    5,
+    10
+  ],
+  "patient_arrivals_per_hour": [
+    0.5,
+    1,
+    2
+  ],
+  "graph_replicates": 500,
+  "max_epochs": 6,
+  "training_rows": "Only rows before inferred onset (first positive label+6); all observed rows for benchmark-negative patients",
+  "utility": "Official challenge utility on full-stay hourly states; once-policy uses latched state after first alarm. This is distinct from review count."
+}
