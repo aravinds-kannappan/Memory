@@ -62,3 +62,15 @@ def test_minimum_cut_endpoints():
     g=nx.DiGraph([('s','a'),('a','d'),('s','b'),('b','d')])
     assert set(protected_vertex_cut(g,'s','d'))=={'a','b'}
     g.add_edge('s','d');assert protected_vertex_cut(g,'s','d') is None
+
+def test_withdrawal_of_either_parent_blocks_merged_derivative():
+    g=pipeline()
+    for source in ['video','ehr']:
+        p={('p0',s,'archiving'):True for s in ['video','ehr']};p[('p0',source,'archiving')]=False
+        h=mask(g,'p0','archiving',p)[0]
+        assert not nx.has_path(h,'cache','archive')
+
+def test_vectorized_losses_match_direct_patient_definition():
+    rng=np.random.default_rng(2026);u=np.repeat(np.arange(10),7);y=rng.integers(0,2,len(u));p=rng.random(len(u))
+    expected=[np.sum(y[u==i]*((1-p[u==i])>.3))/max(1,sum(y[u==i])) for i in range(10)]
+    np.testing.assert_allclose(patient_losses(y,p,u,.3),expected)

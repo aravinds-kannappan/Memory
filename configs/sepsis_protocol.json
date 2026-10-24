@@ -1,0 +1,22 @@
+{
+  "dataset": "PhysioNet/CinC 2019 v1.0.0 public hospital systems A and B",
+  "sampling_seed": 20261023,
+  "patients_per_site": 3000,
+  "sampling": "Uniform without replacement from complete S3 file listings; no labels inspected for inclusion",
+  "prediction_time": "Each observed ICU hour t",
+  "outcome": "Provided SepsisLabel at t, already shifted six hours early by the dataset authors",
+  "prediction_horizon": "Use published early-warning target unchanged; includes hours after the first positive label; not incident-only forecasting",
+  "availability": "Only rows 0 through t; forward-fill and cumulative summaries; no backward fill. Store timestamps unavailable.",
+  "seeds": [11, 29, 47],
+  "split": "A: 60% train, 20% calibration, 20% internal test; all B patients external-site test",
+  "temporal_holdout": "Not identifiable: absolute admission dates are absent; test causal feature invariance instead",
+  "models": ["metadata", "full_ehr", "consent_no_labs", "consent_no_vitals"],
+  "regularization_C": 1,
+  "alpha": 0.05,
+  "crc_estimands": ["unconditional patient missed-positive-window fraction", "positive-patient conditional missed-positive-window fraction"],
+  "positive_conditioning": "Use only positive calibration patients for the second rule; apply that threshold to all test patients. Conditional exchangeability required.",
+  "bootstrap_replicates": 500,
+  "bootstrap_seed": 2026,
+  "interval_models": "seed 11, all models and both test sites; 500 paired patient-cluster resamples",
+  "workload": "Hourly alerts with no cooldown. Count false alerts per 24 observed patient-hours separately from simulated nurse opportunity rates."
+}

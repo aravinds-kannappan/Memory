@@ -10,7 +10,9 @@ NODE_TYPES={'video':'observation','skeleton':'movement_features','ehr':'ehr_even
 
 def pipeline(bypass=False, cache=True):
     g=nx.DiGraph()
-    for n,typ in NODE_TYPES.items():g.add_node(n,type=typ,timestamp=0.,patient='p0',provenance=['video'] if n not in ['ehr'] else ['ehr'])
+    for n,typ in NODE_TYPES.items():
+        lineage=['ehr'] if n=='ehr' else ['video'] if n in ['video','skeleton','archive'] else ['video','ehr']
+        g.add_node(n,type=typ,timestamp=0.,patient='p0',provenance=lineage)
     edges=[('video','skeleton'),('skeleton','gate'),('ehr','gate'),('gate','summary'),
            ('summary','prediction'),('prediction','pager'),('pager','physician'),
            ('physician','action'),('physician','ehr_write'),('video','archive'),('summary','profile')]

@@ -16,8 +16,10 @@ def patient_losses(y, scores, patients, lam):
     if not 0 <= lam <= 1: raise ValueError('lambda outside [0,1]')
     # Comparing lambda to 1-score preserves exact event knots and right-continuity.
     alert = (1 - scores) <= lam
-    return np.array([np.sum(y[patients==p] * ~alert[patients==p]) /
-                     max(1, np.sum(y[patients==p])) for p in np.unique(patients)])
+    _,inverse=np.unique(patients,return_inverse=True)
+    positives=np.bincount(inverse,weights=y)
+    missed=np.bincount(inverse,weights=y*~alert)
+    return missed/np.maximum(positives,1)
 
 def calibrate(y, scores, patients, alpha=0.05):
     if not 0 < alpha < 1: raise ValueError('alpha outside (0,1)')
@@ -27,9 +29,9 @@ def calibrate(y, scores, patients, alpha=0.05):
     # with tied knots evaluated after all tied alerts enter the nested set.
     y=np.asarray(y);scores=np.asarray(scores);patients=np.asarray(patients)
     patient_losses(y,scores,patients,0.)  # validate before cumulative evaluation
-    weights=np.zeros(len(y))
-    for unit in np.unique(patients):
-        keep=patients==unit;weights[keep]=y[keep]/max(1,y[keep].sum())/n
+    _,inverse=np.unique(patients,return_inverse=True)
+    positive_counts=np.bincount(inverse,weights=y)
+    weights=y/np.maximum(positive_counts[inverse],1)/n
     order=np.argsort(1-scores);events=(1-scores)[order];cumulative=np.r_[0.,np.cumsum(weights[order])]
     risks=np.maximum(0.,weights.sum()-cumulative[np.searchsorted(events,knots,side='right')])
     curve=[]; selected=None
