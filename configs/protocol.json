@@ -1,0 +1,10 @@
+{
+  "seeds": [11, 29, 47],
+  "alpha": 0.05,
+  "loss_bound": 1.0,
+  "bootstrap_replicates": 500,
+  "movement": {"prediction_time": "end of 32 observed frames", "outcome": "annotated impact in the final observed frame", "horizon_seconds": 0, "stride_frames": 8, "sample_frames": 32, "epochs": 20, "batch_size": 32, "learning_rate": 0.001, "channels": [32, 64], "split_unit": "participant", "temporal_holdout": "trial 3 of held-out participants: repetition-order stress only, no verified calendar dates", "clinical_metadata": "not available in motion-only benchmarks", "unavailable_labels": ["clinical bed exit", "clinical delirium", "future fall"]},
+  "ehr": {"prediction_time": "ICU admission plus 6, 12, 24 hours", "outcome": "death within the next 48 hours", "horizon_hours": 48, "landmarks_hours": [6, 12, 24], "split_unit": "subject_id", "temporal_holdout": "2014 - 2016 anchor-year group; earlier group development", "site_holdout": "not possible: single institution", "vital_items": [220045, 220179, 220180, 220181, 220210, 220277, 223761, 223762], "lab_items": [50813, 50912, 51301, 51265, 50971, 50983], "sedative_items": [222168, 221668, 221744, 225150], "regularization_C": 1.0},
+  "simulation": {"K_per_hour": [2, 5, 10, 20, 40, 60], "arrivals_per_hour": [5, 15, 30, 60], "service_minutes": [2, 5, 10], "hours": 8, "queue_limit": 20, "withdrawal_hours": [0, 4], "max_wait_minutes": 15, "lambda_grid": [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0]},
+  "privacy": {"measure": "closed-set participant re-identification balanced accuracy", "attack_split": "train trial 1, test trial 3; same identities, distinct recordings", "rgb_features": "per-channel 16-bin normalized histograms and 8x8 mean appearance", "skeleton_features": "root-centered trajectory mean, standard deviation and velocity; retain body scale", "classifier": "standardized regularized logistic regression", "limitation": "one specified attacker; not a proof of anonymity"}
+}

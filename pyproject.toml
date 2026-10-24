@@ -1,0 +1,15 @@
+[project]
+name = "consent-clinical-ai"
+version = "0.1.0"
+requires-python = ">=3.11"
+dependencies = [
+    "matplotlib>=3.11.2",
+    "networkx>=3.6.1",
+    "numpy<3",
+    "pandas>=3.1.0",
+    "pytest>=9.1.1",
+    "requests>=2.34.2",
+    "scikit-learn>=1.9.1",
+    "scipy>=1.17.1",
+    "torch>=2.14.1",
+]

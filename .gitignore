@@ -1,0 +1,12 @@
+.venv
+.venv-initial/
+__pycache__/
+.pytest_cache/
+data/
+results/
+*.egg-info/
+.DS_Store
+specification/
+PLAN.md
+DECISIONS.md
+PROGRESS.md
