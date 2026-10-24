@@ -71,5 +71,38 @@
   "graph_replicates": 500,
   "max_epochs": 6,
   "training_rows": "Only rows before inferred onset (first positive label+6); all observed rows for benchmark-negative patients",
-  "utility": "Official challenge utility on full-stay hourly states; once-policy uses latched state after first alarm. This is distinct from review count."
+  "utility": "Official challenge utility on full-stay hourly states; once-policy uses latched state after first alarm. This is distinct from review count.",
+  "resume": {
+    "directory": "revision-initial-partial",
+    "completed": [
+      {
+        "seed": 11,
+        "model": "logistic"
+      }
+    ],
+    "source_run": "163e8467-10cb-4f72-9a87-ec36769e4ef6",
+    "source_commit": "6e1b8ea9",
+    "sha256": {
+      "thresholds-logistic-11.json": "a0429d17d9be3ddbfc0315e557b8b5ef3a3b6572f2a50d755d2345b035215436",
+      "groups.csv": "1587f575454213989d19cf99850ef9f0f2327cfaadcccfb574182aae4483a366",
+      "predictions-logistic-11-calibration_B.npz": "d11438c6614afeb760221cc5020a549011e824a53141392895424cd88260d433",
+      "provenance.json": "67ff22c6cb91eb5016bad93f9203b67ccb509c6ba3ad0561d8a747fa3b81877e",
+      "logistic-11.pkl": "38f830b7f253733600aaf97804ee11768840e6c5fbfd5726bb1565d0a99845d3",
+      "predictions-logistic-11-calibration.npz": "9c660a8efdf722a717b937f191e3df7cdbd21eefd4e42f3fb23066fd236c7844",
+      "queues.csv": "7779f36df9a1856e93e8822d7a5e92be3424f8428ecec7c46f2226425bbf3f58",
+      "certificates.csv": "f79ab3edfe387688b7eb427455efff8816e2b8c85376f6519da27e84b54e9197",
+      "metrics.csv": "61688969e0f163f909d37e57b9569a12c5f590bbc82f029baa4518204316dcd2",
+      "calibration_draws.csv": "dfcc353b38c8879130e30407e41f28552b29ee41edf545a02f2459d8a4721dd1",
+      "splits-11.json": "23d5393b1e4f8752cedf8a97100ca733e2ff6fe5a3197e73f04bd343c9a0254e",
+      "consent.csv": "73b18bdda8594f3facf361edf2dacb245d6a524060ddc006fdd976801ec32a2f",
+      "predictions-logistic-11-validation.npz": "1d444ff51e83868fd40c723c18492491b0efd50d083988a883e001523c72fed1",
+      "cohort.csv": "61a642b66124a227bd830716fdfdf94c57cab73feb3e60240abb4ed1ae10e4b7",
+      "tuning-logistic-11.json": "05a11d0cf04708fcbba3f60c382aaf4d16d6c7bc33f816c0fb273cb756c0e01d",
+      "predictions-logistic-11-test_A.npz": "ee868753f0f83a3200092427d4bcb8cfeed29e86c9baa3dc7ccf6a5c7f2c7763",
+      "predictions-logistic-11-test_B.npz": "3c7666cf8207fbdcb0dff5ed97031d0006d36f20b5ac16dab8b1b4489fd31421",
+      "weighted_shift.csv": "c466ee18748bc41818e3d5b9d2aefca5a51b9ccda117c1ca72c5544882536bd3",
+      "data_manifest.json": "fb86d44e360afe01bfbb21e27dc9e949188106598d6a95532d60efb2d38d3696",
+      "frontiers.csv": "8b2d8430fdb8f90ff90ec60757ee8f3f3ec14f1ee72c213c2d52eece034aed01"
+    }
+  }
 }

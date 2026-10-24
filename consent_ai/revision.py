@@ -25,9 +25,21 @@ def run(root,out):
     root=data.acquire(root,out);X,y,items,columns=data.load(root,out)
     pd.DataFrame(items).to_csv(out/'cohort.csv',index=False);print('FULL_COHORT',json.dumps({'patients':len(items),'hours':len(y),'sites':dict(pd.Series([p['site'] for p in items]).value_counts().astype(int))},default=int),flush=True)
     metrics=[];curves=[];certificates=[];groups=[];draws=[];consent=[];queues=[];weighted=[]
+    resumed=set()
+    if 'resume' in cfg:
+        import hashlib,shutil
+        r=cfg['resume'];source=out.parent/r['directory']
+        for name,digest in r['sha256'].items():
+            assert hashlib.sha256((source/name).read_bytes()).hexdigest()==digest,name
+            if name!='provenance.json':shutil.copy2(source/name,out/name)
+        metrics=pd.read_csv(source/'metrics.csv').to_dict('records');curves=pd.read_csv(source/'frontiers.csv').to_dict('records');certificates=pd.read_csv(source/'certificates.csv').to_dict('records');groups=pd.read_csv(source/'groups.csv').to_dict('records');draws=pd.read_csv(source/'calibration_draws.csv').to_dict('records');consent=pd.read_csv(source/'consent.csv').to_dict('records');queues=pd.read_csv(source/'queues.csv').to_dict('records');weighted=pd.read_csv(source/'weighted_shift.csv').to_dict('records')
+        resumed={(x['seed'],x['model']) for x in r['completed']}
+        print('RESUMED_COMPLETED_MODELS',json.dumps({'models':r['completed'],'source_run':r['source_run'],'source_commit':r['source_commit']}),flush=True)
+
     for seed in cfg['seeds']:
         split=data.split(items,seed);(out/f'splits-{seed}.json').write_text(json.dumps({k:[items[i]['patient'] for i in ids] for k,ids in split.items()},indent=2))
         for name in cfg['models']:
+            if (seed,name) in resumed:continue
             print('MODEL_START',seed,name,flush=True)
             est=models.tune_gru(X,y,items,split,seed,out,cfg['max_epochs']) if name=='gru' else models.tune_tabular(X,y,items,split,name,seed,out)
             if name!='gru':

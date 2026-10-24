@@ -34,3 +34,12 @@ def test_official_utility_vectorization():
     base=compute_prediction_utility(y,np.zeros(20));denom=compute_prediction_utility(y,best)-base
     expected=[(compute_prediction_utility(y,scores>=t)-base)/denom for t in [.25,.75]]
     assert np.allclose(out,expected)
+
+def test_boosting_handles_constant_and_empty_features():
+    from sklearn.feature_selection import VarianceThreshold
+    from sklearn.ensemble import HistGradientBoostingClassifier
+    from sklearn.pipeline import make_pipeline
+    x=np.column_stack([np.arange(40),np.zeros(40),np.full(40,np.nan)])
+    estimator=make_pipeline(VarianceThreshold(),HistGradientBoostingClassifier(max_iter=2,min_samples_leaf=2))
+    estimator.fit(x,np.arange(40)%2)
+    assert estimator.predict_proba(x).shape==(40,2)

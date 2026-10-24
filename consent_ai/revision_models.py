@@ -6,6 +6,7 @@ from sklearn.impute import SimpleImputer
 from sklearn.preprocessing import StandardScaler
 from sklearn.linear_model import LogisticRegression
 from sklearn.ensemble import HistGradientBoostingClassifier
+from sklearn.feature_selection import VarianceThreshold
 from sklearn.metrics import average_precision_score,roc_auc_score
 import torch
 from torch import nn
@@ -18,7 +19,7 @@ def tune_tabular(X,y,items,split,model,seed,out):
     else:settings=[dict(max_leaf_nodes=l,l2_regularization=r,class_weight=w) for l,r,w in [(15,1.,None),(31,5.,None),(31,5.,'balanced')]]
     for h in settings:
         if model=='logistic':est=make_pipeline(SimpleImputer(keep_empty_features=True),StandardScaler(),LogisticRegression(**h,max_iter=350,random_state=seed))
-        else:est=HistGradientBoostingClassifier(**h,max_iter=120,learning_rate=.08,early_stopping=False,random_state=seed)
+        else:est=make_pipeline(VarianceThreshold(),HistGradientBoostingClassifier(**h,max_iter=120,learning_rate=.08,early_stopping=False,random_state=seed))
         est.fit(X[tr],y[tr]);score=est.predict_proba(X[va])[:,1];ap=average_precision_score(y[va],score)
         rec=dict(model=model,seed=seed,hyperparameters=h,validation_ap=float(ap),validation_auc=float(roc_auc_score(y[va],score)));records.append(rec);print('TUNING',json.dumps(rec),flush=True)
         if ap>best_ap:best_ap=ap;best=est
