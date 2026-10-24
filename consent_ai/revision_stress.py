@@ -57,7 +57,7 @@ def queues(seq,threshold,cfg,seed,model,site):
                         if pos[i]:
                             onset=np.flatnonzero(seq[i]['y'])[0]+6
                             if not loss[i,0] and first[i,0]+wait+service<onset and correct:miss[i]=False
-                        elif rng.random()>specificity:fp+=1
+                        elif not np.any(seq[i]['y']) and rng.random()>specificity:fp+=1
                     rows.append(dict(seed=seed,model=model,site=site,threshold=threshold,patient_arrivals_per_hour=arrival,service_minutes=minutes,reviewer_sensitivity=sensitivity,reviewer_specificity=specificity,reviews=finished,patients=len(seq),mean_wait_minutes=float(np.mean(waits)*60) if waits else 0,p95_wait_minutes=float(np.quantile(waits,.95)*60) if waits else 0,end_to_end_conditional_miss=float(miss[pos].mean()),false_actions=fp,source='SIMULATION ON REAL SEPSIS SCORES',fatigue='sensitivity times max(.5,1-.05*waiting_hours)'))
     return rows
 

@@ -43,3 +43,11 @@ def test_boosting_handles_constant_and_empty_features():
     estimator=make_pipeline(VarianceThreshold(),HistGradientBoostingClassifier(max_iter=2,min_samples_leaf=2))
     estimator.fit(x,np.arange(40)%2)
     assert estimator.predict_proba(x).shape==(40,2)
+
+
+def test_queue_false_actions_exclude_initial_positive_patients():
+    from consent_ai.revision_stress import queues
+    seq=[dict(y=np.array([0,0]),score=np.array([1.,1.])),dict(y=np.array([1,1]),score=np.array([1.,1.])),dict(y=np.array([0,1,1,1,1,1,1,1,1]),score=np.array([0,1,1,1,1,1,1,1,1.]))]
+    cfg=dict(patient_arrivals_per_hour=[1],service_minutes=[2],review_sensitivity=[1],review_specificity=[0])
+    result=queues(seq,.5,cfg,11,'test','A')
+    assert result[0]['false_actions']==1
