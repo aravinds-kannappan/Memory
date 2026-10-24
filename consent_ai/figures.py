@@ -47,8 +47,9 @@ def dashboard(results,out):
         p=model[(model.policy==('fixed_0.5' if metric in ['auroc','brier'] else 'crc'))&(model.regime=='random')]
         pts=[]
         for name,g in p.groupby('model'):
-            pts.append(dict(label=name.replace('_',' '),value=float(g[metric].mean()),low=float(g[metric].min()),high=float(g[metric].max())))
-        views.append(dict(label=label,unit=unit,points=pts,note='MIMIC-IV DEMO DATA. Three prespecified patient split seeds; whiskers show seed range, not a confidence interval. Patient-bootstrap intervals and paired effects are in CSV files.'))
+            values=g[metric].dropna()
+            if len(values):pts.append(dict(label=name.replace('_',' '),value=float(values.mean()),low=float(values.min()),high=float(values.max()),valid_seeds=len(values)))
+        views.append(dict(label=label,unit=unit,points=pts,note='MIMIC-IV DEMO DATA. Three prespecified patient split seeds, but only ONE has positive test patients; AUROC/sensitivity are undefined in the other two. Shown values average evaluable seeds only. Whiskers are seed range, not confidence intervals. See CSVs for patient counts and missing estimates.'))
     views.append(dict(label='Synthetic CRC under exchangeability and shift',unit='Mean patient missed-window loss',points=[dict(label=f"n={int(r.n)} {'shift' if r.shifted else 'IID'}",value=r.mean_risk,low=r.mc_lower,high=r.mc_upper) for r in mc.itertuples()],note='SYNTHETIC mathematical check, 600 calibration repetitions per setting. Whiskers: 95% Monte Carlo intervals. Alpha=.05; B=1. The guarantee applies only under exchangeability and the stated assumptions.'))
     payload=json.dumps(views,allow_nan=False)
     html=HTML.replace('__DATA__',payload)

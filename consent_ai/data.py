@@ -55,7 +55,7 @@ def upfall_skeleton(root):
             for name in sorted(z.namelist()):
                 if not name.endswith('.csv'):continue
                 # One source filename lacks its camera prefix; do not invent a camera.
-                m=re.search(r'S(\d+)A(\d+)T(\d+)',name)
+                m=re.search(r'S(\d+)_?A(\d+)_?T(\d+)',name)
                 if m is None:raise ValueError(f'Unknown filename {name}')
                 subject,activity,trial=map(int,m.groups());d=pd.read_csv(z.open(name))
                 expected=[f'Joint{j}_{axis}' for j in range(1,34) for axis in 'XYZ']
@@ -63,7 +63,8 @@ def upfall_skeleton(root):
                 y=d.iloc[:,-1].to_numpy();assert np.isin(y,[0,1]).all()
                 x=d[expected].to_numpy(dtype=np.float32).reshape(-1,33,3)
                 assert np.isfinite(x).all()
-                audit.append(dict(file=name,subject=subject,trial=trial,activity=activity,frames=len(x),label_column=d.columns[-1],positive_frames=int(y.sum()),sha256=hashlib.sha256(z.read(name)).hexdigest(),camera=1 if name.startswith('C1') else None))
+                camera=re.match(r'C(\d+)',name)
+                audit.append(dict(file=name,subject=subject,trial=trial,activity=activity,frames=len(x),label_column=d.columns[-1],positive_frames=int(y.sum()),sha256=hashlib.sha256(z.read(name)).hexdigest(),camera=int(camera.group(1)) if camera else None))
                 records.append(dict(file=name,subject=subject,trial=trial,activity=activity,x=x,y=y.astype(int)))
     return records,audit
 
